@@ -1,0 +1,172 @@
+<nav class="workspace-nav">
+  <aside class="workspace-rail">
+    <a class="workspace-rail__brand" href="{{ url_for('web.index') }}" aria-label="Back to landing page">
+      <span>V</span>
+    </a>
+
+    <div class="workspace-rail__group">
+      <a class="workspace-rail__item {% if page_name == 'dashboard' %}active{% endif %}" href="{{ url_for('web.dashboard') }}" title="Dashboard" aria-label="Dashboard">
+        <span class="workspace-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 13h7V4H4v9zm9 7h7V4h-7v16zM4 20h7v-5H4v5z" fill="currentColor"/></svg>
+        </span>
+      </a>
+      <a class="workspace-rail__item {% if page_name == 'chatbot' %}active{% endif %}" href="{{ url_for('web.chatbot') }}" title="Chatbot" aria-label="Chatbot">
+        <span class="workspace-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v7A2.5 2.5 0 0 1 17.5 15H9l-4.5 4v-4A2.5 2.5 0 0 1 2 12.5v-7A2.5 2.5 0 0 1 4.5 3H6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+        </span>
+      </a>
+      <a class="workspace-rail__item {% if page_name == 'calendar' %}active{% endif %}" href="{{ url_for('web.calendar') }}" title="Calendar" aria-label="Calendar">
+        <span class="workspace-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2v4M17 2v4M4 9h16M6 5h12a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+      </a>
+      <a class="workspace-rail__item {% if page_name == 'notifications' %}active{% endif %}" href="{{ url_for('web.notifications') }}" title="Notifications" aria-label="Notifications">
+        <span class="workspace-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a4 4 0 0 0-4 4v1.4c0 .8-.3 1.6-.8 2.2L6 12.3V15h12v-2.7l-1.2-1.7a3.9 3.9 0 0 1-.8-2.2V7a4 4 0 0 0-4-4zm-2 15a2 2 0 0 0 4 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+      </a>
+      <a class="workspace-rail__item {% if page_name == 'resources' %}active{% endif %}" href="{{ url_for('web.resources') }}" title="Resources" aria-label="Resources">
+        <span class="workspace-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4.5A2.5 2.5 0 0 1 7.5 2H19v18H7.5A2.5 2.5 0 0 0 5 22V4.5zm0 0V20m4-12h6m-6 4h6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+      </a>
+      <a class="workspace-rail__item {% if page_name == 'tools' %}active{% endif %}" href="{{ url_for('web.tools') }}" title="Tools" aria-label="Tools">
+        <span class="workspace-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 3H7a2 2 0 0 0-2 2v14l4-3h8a2 2 0 0 0 2-2V8.5L13.5 3zM13 3v6h6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg>
+        </span>
+      </a>
+      <a class="workspace-rail__item {% if page_name == 'map' %}active{% endif %}" href="{{ url_for('web.campus_map') }}" title="Campus map" aria-label="Campus map">
+        <span class="workspace-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18l-5 3V6l5-3 6 3 5-3v15l-5 3-6-3zM9 3v15m6-12v15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg>
+        </span>
+      </a>
+      <a class="workspace-rail__item {% if page_name == 'notes' %}active{% endif %}" href="{{ url_for('web.notes') }}" title="Notes" aria-label="Notes">
+        <span class="workspace-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h8l4 4v14H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zm8 0v4h4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg>
+        </span>
+      </a>
+      <a class="workspace-rail__item {% if page_name == 'settings' %}active{% endif %}" href="{{ url_for('web.settings') }}" title="Settings" aria-label="Settings">
+        <span class="workspace-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8.5A3.5 3.5 0 1 0 12 15.5A3.5 3.5 0 1 0 12 8.5Z" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M19.4 15a1 1 0 0 0 .2 1.1l.1.1a1 1 0 0 1 0 1.4l-1.2 1.2a1 1 0 0 1-1.4 0l-.1-.1a1 1 0 0 0-1.1-.2a1 1 0 0 0-.6.9V20a1 1 0 0 1-1 1h-1.8a1 1 0 0 1-1-1v-.2a1 1 0 0 0-.6-.9a1 1 0 0 0-1.1.2l-.1.1a1 1 0 0 1-1.4 0l-1.2-1.2a1 1 0 0 1 0-1.4l.1-.1a1 1 0 0 0 .2-1.1a1 1 0 0 0-.9-.6H4a1 1 0 0 1-1-1v-1.8a1 1 0 0 1 1-1h.2a1 1 0 0 0 .9-.6a1 1 0 0 0-.2-1.1l-.1-.1a1 1 0 0 1 0-1.4l1.2-1.2a1 1 0 0 1 1.4 0l.1.1a1 1 0 0 0 1.1.2a1 1 0 0 0 .6-.9V4a1 1 0 0 1 1-1h1.8a1 1 0 0 1 1 1v.2a1 1 0 0 0 .6.9a1 1 0 0 0 1.1-.2l.1-.1a1 1 0 0 1 1.4 0l1.2 1.2a1 1 0 0 1 0 1.4l-.1.1a1 1 0 0 0-.2 1.1a1 1 0 0 0 .9.6H20a1 1 0 0 1 1 1v1.8a1 1 0 0 1-1 1h-.2a1 1 0 0 0-.9.6z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+        </span>
+      </a>
+      {% if user and user.role == 'admin' %}
+        <a class="workspace-rail__item {% if page_name == 'admin' %}active{% endif %}" href="{{ url_for('web.admin') }}" title="Admin panel" aria-label="Admin panel">
+          <span class="workspace-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 4v5c0 4.2-2.8 8.1-7 9-4.2-.9-7-4.8-7-9V7l7-4zm0 5v8m-4-4h8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </a>
+      {% endif %}
+    </div>
+
+    <div class="workspace-rail__group workspace-rail__group--end">
+      <button class="workspace-rail__item workspace-rail__item--button" type="button" title="Toggle sidebar" aria-label="Toggle sidebar" data-shell-toggle>
+        <span class="workspace-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </span>
+      </button>
+      <form method="post" action="{{ url_for('auth.logout') }}">
+        <button class="workspace-rail__item workspace-rail__item--button" type="submit" title="Logout" aria-label="Logout">
+          <span class="workspace-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 8l4 4-4 4M19 12H9m6 7H7a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </button>
+      </form>
+    </div>
+  </aside>
+
+  <aside class="workspace-sidebar" data-shell-sidebar>
+    <div class="workspace-sidebar__top">
+      <div class="workspace-sidebar__brand">
+        <strong>Veritas AI</strong>
+        <span>Student Assistant</span>
+      </div>
+      <button class="workspace-sidebar__toggle" type="button" aria-label="Collapse sidebar" data-shell-toggle>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+
+    <label class="workspace-sidebar__search">
+      <span class="workspace-icon">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 19a8 8 0 1 1 5.3-14l4.1 4.1-1.4 1.4-3.8-3.8A6 6 0 1 0 17 11a6 6 0 0 0-.6-2.6l1.5-1.3A8 8 0 0 1 11 19z" fill="currentColor"/></svg>
+      </span>
+      <input type="text" value="" placeholder="Search workspace" readonly>
+    </label>
+
+    <div class="workspace-sidebar__section">
+      <span class="workspace-sidebar__label">Workspace</span>
+      <a class="workspace-sidebar__item {% if page_name == 'dashboard' %}active{% endif %}" href="{{ url_for('web.dashboard') }}">
+        <span class="workspace-sidebar__icon workspace-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 13h7V4H4v9zm9 7h7V4h-7v16zM4 20h7v-5H4v5z" fill="currentColor"/></svg>
+        </span>
+        <span>Dashboard</span>
+      </a>
+      <a class="workspace-sidebar__item {% if page_name == 'chatbot' %}active{% endif %}" href="{{ url_for('web.chatbot') }}">
+        <span class="workspace-sidebar__icon workspace-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v7A2.5 2.5 0 0 1 17.5 15H9l-4.5 4v-4A2.5 2.5 0 0 1 2 12.5v-7A2.5 2.5 0 0 1 4.5 3H6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+        </span>
+        <span>Chatbot</span>
+      </a>
+      <a class="workspace-sidebar__item {% if page_name == 'calendar' %}active{% endif %}" href="{{ url_for('web.calendar') }}">
+        <span class="workspace-sidebar__icon workspace-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2v4M17 2v4M4 9h16M6 5h12a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <span>Calendar</span>
+      </a>
+      <a class="workspace-sidebar__item {% if page_name == 'notifications' %}active{% endif %}" href="{{ url_for('web.notifications') }}">
+        <span class="workspace-sidebar__icon workspace-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a4 4 0 0 0-4 4v1.4c0 .8-.3 1.6-.8 2.2L6 12.3V15h12v-2.7l-1.2-1.7a3.9 3.9 0 0 1-.8-2.2V7a4 4 0 0 0-4-4zm-2 15a2 2 0 0 0 4 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <span>Notifications</span>
+      </a>
+      <a class="workspace-sidebar__item {% if page_name == 'resources' %}active{% endif %}" href="{{ url_for('web.resources') }}">
+        <span class="workspace-sidebar__icon workspace-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4.5A2.5 2.5 0 0 1 7.5 2H19v18H7.5A2.5 2.5 0 0 0 5 22V4.5zm0 0V20m4-12h6m-6 4h6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <span>Resources</span>
+      </a>
+      <a class="workspace-sidebar__item {% if page_name == 'tools' %}active{% endif %}" href="{{ url_for('web.tools') }}">
+        <span class="workspace-sidebar__icon workspace-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 3H7a2 2 0 0 0-2 2v14l4-3h8a2 2 0 0 0 2-2V8.5L13.5 3zM13 3v6h6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg>
+        </span>
+        <span>Tools</span>
+      </a>
+      <a class="workspace-sidebar__item {% if page_name == 'map' %}active{% endif %}" href="{{ url_for('web.campus_map') }}">
+        <span class="workspace-sidebar__icon workspace-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18l-5 3V6l5-3 6 3 5-3v15l-5 3-6-3zM9 3v15m6-12v15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg>
+        </span>
+        <span>Campus Map</span>
+      </a>
+      <a class="workspace-sidebar__item {% if page_name == 'notes' %}active{% endif %}" href="{{ url_for('web.notes') }}">
+        <span class="workspace-sidebar__icon workspace-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h8l4 4v14H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zm8 0v4h4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg>
+        </span>
+        <span>Notes</span>
+      </a>
+      <a class="workspace-sidebar__item {% if page_name == 'settings' %}active{% endif %}" href="{{ url_for('web.settings') }}">
+        <span class="workspace-sidebar__icon workspace-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8.5A3.5 3.5 0 1 0 12 15.5A3.5 3.5 0 1 0 12 8.5Z" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M19.4 15a1 1 0 0 0 .2 1.1l.1.1a1 1 0 0 1 0 1.4l-1.2 1.2a1 1 0 0 1-1.4 0l-.1-.1a1 1 0 0 0-1.1-.2a1 1 0 0 0-.6.9V20a1 1 0 0 1-1 1h-1.8a1 1 0 0 1-1-1v-.2a1 1 0 0 0-.6-.9a1 1 0 0 0-1.1.2l-.1.1a1 1 0 0 1-1.4 0l-1.2-1.2a1 1 0 0 1 0-1.4l.1-.1a1 1 0 0 0 .2-1.1a1 1 0 0 0-.9-.6H4a1 1 0 0 1-1-1v-1.8a1 1 0 0 1 1-1h.2a1 1 0 0 0 .9-.6a1 1 0 0 0-.2-1.1l-.1-.1a1 1 0 0 1 0-1.4l1.2-1.2a1 1 0 0 1 1.4 0l.1.1a1 1 0 0 0 1.1.2a1 1 0 0 0 .6-.9V4a1 1 0 0 1 1-1h1.8a1 1 0 0 1 1 1v.2a1 1 0 0 0 .6.9a1 1 0 0 0 1.1-.2l.1-.1a1 1 0 0 1 1.4 0l1.2 1.2a1 1 0 0 1 0 1.4l-.1.1a1 1 0 0 0-.2 1.1a1 1 0 0 0 .9.6H20a1 1 0 0 1 1 1v1.8a1 1 0 0 1-1 1h-.2a1 1 0 0 0-.9.6z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+        </span>
+        <span>Settings</span>
+      </a>
+      {% if user and user.role == 'admin' %}
+        <a class="workspace-sidebar__item {% if page_name == 'admin' %}active{% endif %}" href="{{ url_for('web.admin') }}">
+          <span class="workspace-sidebar__icon workspace-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 4v5c0 4.2-2.8 8.1-7 9-4.2-.9-7-4.8-7-9V7l7-4zm0 5v8m-4-4h8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          <span>Admin Panel</span>
+        </a>
+      {% endif %}
+    </div>
+
+    <div class="workspace-sidebar__footer">
+      <div class="workspace-sidebar__account">
+        <div class="workspace-sidebar__avatar">{{ user.name[:2] if user else 'VA' }}</div>
+        <div>
+          <strong>{{ user.name if user else 'Veritas AI' }}</strong>
+          <span>{{ user.role|title if user else 'Guest' }}</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+</nav>

@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block body %}
+  <main class="workspace-shell" data-shell>
+    {% include "partials/sidebar.html" %}
+    <section class="workspace-view">
+      <header class="workspace-pagehead">
+        <div>
+          <span class="eyebrow">Academic support</span>
+          <h1>Tools</h1>
+          <p>These tools come directly from your questionnaire: note summarizing, flashcards, Q&amp;A help, and exam preparation support.</p>
+        </div>
+      </header>
+
+      <section class="workspace-resource-grid">
+        <article class="workspace-resource-card">
+          <span class="workspace-metric-card__label">AI notes tool</span>
+          <h2>Lecture Note Summaries</h2>
+          <p>Paste or upload long notes and turn them into shorter, easier study summaries for revision.</p>
+          <span class="status-pill">Planned module</span>
+        </article>
+        <article class="workspace-resource-card">
+          <span class="workspace-metric-card__label">Revision support</span>
+          <h2>Flashcards and Q&amp;A</h2>
+          <p>Generate quick practice questions, answer drills, and revision prompts from class materials.</p>
+          <span class="status-pill">Planned module</span>
+        </article>
+        <article class="workspace-resource-card">
+          <span class="workspace-metric-card__label">Exam prep</span>
+          <h2>Past Questions Help</h2>
+          <p>Use the resource library together with the chatbot to review common exam questions and study materials.</p>
+          <a class="primary-button primary-button--compact" href="{{ url_for('web.resources') }}">Open Resources</a>
+        </article>
+      </section>
+
+      <section class="workspace-panel workspace-panel--full">
+        <div class="workspace-panel__head">
+          <div>
+            <span class="workspace-panel__eyebrow">Integrated questionnaire features</span>
+            <h2>How this module fits the assistant</h2>
+          </div>
+        </div>
+        <div class="workspace-list">
+          <article class="workspace-list__item">
+            <strong>Realtime support</strong>
+            <p>The chatbot remains the front door for questions about registration, clearance, fees, hostel, rules, contacts, and weekly updates.</p>
+          </article>
+          <article class="workspace-list__item">
+            <strong>Academic support layer</strong>
+            <p>This page is where summarizing, flashcards, Q&amp;A generation, and exam-help workflows will live as the next module.</p>
+          </article>
+          <article class="workspace-list__item">
+            <strong>Reminder-driven study flow</strong>
+            <p>Notifications and weekly campus updates can later feed directly into academic tasks and revision planning.</p>
+          </article>
+        </div>
+      </section>
+    </section>
+  </main>
+{% endblock %}

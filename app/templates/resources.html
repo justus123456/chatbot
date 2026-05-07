@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block body %}
+  <main class="workspace-shell" data-shell>
+    {% include "partials/sidebar.html" %}
+    <section class="workspace-view">
+      <header class="workspace-pagehead">
+        <div>
+          <span class="eyebrow">Study support</span>
+          <h1>Resources</h1>
+          <p>Access past questions and study materials from the same compact workspace shell.</p>
+        </div>
+      </header>
+      <section class="workspace-resource-grid">
+        {% for item in resources %}
+          <article class="workspace-resource-card">
+            <span class="workspace-metric-card__label">{{ item.type.replace('_', ' ')|title }}</span>
+            <h2>{{ item.title }}</h2>
+            <p>{{ item.description }}</p>
+            <a class="primary-button primary-button--compact" href="{{ item.file_url }}" target="_blank" rel="noreferrer">Open Resource</a>
+          </article>
+        {% else %}
+          <p class="empty-state">No resources available yet.</p>
+        {% endfor %}
+      </section>
+    </section>
+  </main>
+{% endblock %}

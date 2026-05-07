@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block body %}
+  <main class="workspace-shell" data-shell>
+    {% include "partials/sidebar.html" %}
+    <section class="workspace-view">
+      <header class="workspace-pagehead">
+        <div>
+          <span class="eyebrow">Student workspace</span>
+          <h1>Notes</h1>
+          <p>This side of the platform supports lecture note capture now and grows into document upload, flashcards, summaries, and escalation support in later modules.</p>
+        </div>
+      </header>
+
+      <section class="workspace-panels">
+        <section class="workspace-panel workspace-panel--wide">
+          <div class="workspace-panel__head">
+            <div>
+              <span class="workspace-panel__eyebrow">Private notes</span>
+              <h2>Study scratchpad</h2>
+            </div>
+          </div>
+          <textarea class="chat-notes__field chat-notes__field--page" data-chat-notes placeholder="Write lecture points, reminders, revision questions, or document ideas here..."></textarea>
+        </section>
+
+        <section class="workspace-panel">
+          <div class="workspace-panel__head">
+            <h2>Document system</h2>
+          </div>
+          <div class="workspace-list">
+            <article class="workspace-list__item">
+              <strong>Upload lecture notes</strong>
+              <p>Next module: store documents, extract text, and chunk them for retrieval.</p>
+            </article>
+            <article class="workspace-list__item">
+              <strong>RAG-ready content</strong>
+              <p>Future uploads will move into the knowledge system for better grounded answers.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="workspace-panel">
+          <div class="workspace-panel__head">
+            <h2>Escalation system</h2>
+          </div>
+          <div class="workspace-list">
+            <article class="workspace-list__item">
+              <strong>Student to supervisor</strong>
+              <p>When the assistant fails, the unresolved question can move to the admin side for a direct reply.</p>
+            </article>
+            <article class="workspace-list__item">
+              <strong>Knowledge update loop</strong>
+              <p>Resolved answers can later be fed back into the knowledge base for future students.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="workspace-panel">
+          <div class="workspace-panel__head">
+            <h2>Goal tracking</h2>
+          </div>
+          <div class="workspace-list">
+            <article class="workspace-list__item">
+              <strong>Study targets</strong>
+              <p>Students will be able to set revision goals, deadlines, and progress checkpoints here.</p>
+            </article>
+            <article class="workspace-list__item">
+              <strong>Smart reminders</strong>
+              <p>Goal reminders later combine with calendar dates and activity history.</p>
+            </article>
+          </div>
+        </section>
+      </section>
+    </section>
+  </main>
+{% endblock %}

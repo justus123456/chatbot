@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block body %}
+  <main class="workspace-shell" data-shell>
+    {% include "partials/sidebar.html" %}
+    <section class="workspace-view">
+      {% include "partials/dashboard_overview.html" %}
+    </section>
+  </main>
+{% endblock %}

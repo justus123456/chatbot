@@ -1,0 +1,190 @@
+<section class="workspace-dashboard">
+  <header class="workspace-pagehead">
+    <div>
+      <span class="eyebrow">{{ labels.welcome }}</span>
+      <h1>{{ user.name }}</h1>
+      <p>Stay on top of announcements, reminders, study materials, and your assistant activity from one compact workspace.</p>
+    </div>
+    <div class="workspace-pagehead__actions">
+      <span class="status-pill">
+        {% if data_mode == "supabase" %}
+          Live Supabase
+        {% else %}
+          Demo mode
+        {% endif %}
+      </span>
+      <a class="primary-button primary-button--compact" href="{{ url_for('web.chatbot') }}">Open Chat</a>
+    </div>
+  </header>
+
+  <section class="workspace-metrics">
+    <article class="workspace-metric-card">
+      <span class="workspace-metric-card__label">Announcements</span>
+      <strong>{{ dashboard.announcements|length }}</strong>
+      <p>Latest campus notices and deadlines.</p>
+    </article>
+    <article class="workspace-metric-card">
+      <span class="workspace-metric-card__label">Reminders</span>
+      <strong>{{ dashboard.notifications|length }}</strong>
+      <p>Personal updates waiting for you.</p>
+    </article>
+    <article class="workspace-metric-card">
+      <span class="workspace-metric-card__label">Resources</span>
+      <strong>{{ dashboard.resources|length }}</strong>
+      <p>Study materials ready to open.</p>
+    </article>
+    <article class="workspace-metric-card">
+      <span class="workspace-metric-card__label">Support areas</span>
+      <strong>12</strong>
+      <p>Fees, hostel, map, notes tools, rules, contacts, and more.</p>
+    </article>
+    <article class="workspace-metric-card">
+      <span class="workspace-metric-card__label">Calendar events</span>
+      <strong>{{ dashboard.calendar_events|length }}</strong>
+      <p>Upcoming dates filtered for your student profile.</p>
+    </article>
+  </section>
+
+  <section class="workspace-panels">
+    <article class="workspace-panel workspace-panel--wide">
+      <div class="workspace-panel__head">
+        <div>
+          <span class="workspace-panel__eyebrow">Quick actions</span>
+          <h2>Student support hub</h2>
+        </div>
+        <div class="workspace-panel__actions">
+          <a class="primary-button primary-button--compact" href="{{ url_for('web.chatbot') }}">Open Chatbot</a>
+          <a class="ghost-button ghost-button--compact" href="{{ url_for('web.notifications') }}">View Updates</a>
+        </div>
+      </div>
+      <p class="workspace-panel__copy">Chat with the assistant, review campus notices, and keep your academic support tools within easy reach.</p>
+      <div class="workspace-feature-tags">
+        <span class="chip chip--tight">Realtime support</span>
+        <span class="chip chip--tight">Weekly updates</span>
+        <span class="chip chip--tight">School rules</span>
+        <span class="chip chip--tight">Staff contacts</span>
+        <span class="chip chip--tight">Exam timetable</span>
+        <span class="chip chip--tight">Course guidance</span>
+      </div>
+    </article>
+
+    <article class="workspace-panel">
+      <div class="workspace-panel__head">
+        <h2>Questionnaire modules</h2>
+      </div>
+      <div class="workspace-list">
+        <a class="workspace-list__item workspace-list__item--link" href="{{ url_for('web.chatbot') }}">
+          <strong>Student support chatbot</strong>
+          <p>Realtime questions on fees, hostel booking, clearance, course registration, rules, and contacts.</p>
+        </a>
+        <a class="workspace-list__item workspace-list__item--link" href="{{ url_for('web.tools') }}">
+          <strong>Academic tools</strong>
+          <p>Lecture note summaries, flashcards, Q&amp;A generation, and past question support.</p>
+        </a>
+        <a class="workspace-list__item workspace-list__item--link" href="{{ url_for('web.campus_map') }}">
+          <strong>Digital campus map</strong>
+          <p>Find offices faster with a simple, guided campus office layout.</p>
+        </a>
+      </div>
+    </article>
+
+    <article class="workspace-panel">
+      <div class="workspace-panel__head">
+        <h2>Profile setup</h2>
+      </div>
+      <div class="workspace-list">
+        <a class="workspace-list__item workspace-list__item--link" href="{{ url_for('web.settings') }}">
+          <strong>{% if profile_complete %}Profile ready{% else %}Complete your student profile{% endif %}</strong>
+          <p>Add department, level, phone number, and student number so notifications and calendar items can match your academic path.</p>
+        </a>
+      </div>
+    </article>
+
+    <article class="workspace-panel">
+      <div class="workspace-panel__head">
+        <h2>School calendar</h2>
+      </div>
+      <div class="workspace-list">
+        {% for event in dashboard.calendar_events %}
+          <a class="workspace-list__item workspace-list__item--link" href="{{ url_for('web.calendar') }}">
+            <div class="workspace-list__meta">
+              <strong>{{ event.event_type|title }}</strong>
+              <span>{{ event.start_date }}</span>
+            </div>
+            <strong>{{ event.title }}</strong>
+            <p>{{ event.description }}</p>
+          </a>
+        {% else %}
+          <p class="empty-state">No calendar events yet.</p>
+        {% endfor %}
+      </div>
+    </article>
+
+    <article class="workspace-panel">
+      <div class="workspace-panel__head">
+        <h2>{{ labels.announcements }}</h2>
+      </div>
+      <div class="workspace-list">
+        {% for item in dashboard.announcements[:3] %}
+          <article class="workspace-list__item">
+            <strong>{{ item.title }}</strong>
+            <p>{{ item.content }}</p>
+          </article>
+        {% else %}
+          <p class="empty-state">No announcements yet.</p>
+        {% endfor %}
+      </div>
+    </article>
+
+    <article class="workspace-panel">
+      <div class="workspace-panel__head">
+        <h2>{{ labels.reminders }}</h2>
+      </div>
+      <div class="workspace-list">
+        {% for item in dashboard.notifications %}
+          <article class="workspace-list__item">
+            <div class="workspace-list__meta">
+              <strong>{{ item.type|title }}</strong>
+              <span>{{ item.date }}</span>
+            </div>
+            <p>{{ item.message }}</p>
+          </article>
+        {% else %}
+          <p class="empty-state">No reminders yet.</p>
+        {% endfor %}
+      </div>
+    </article>
+
+    <article class="workspace-panel">
+      <div class="workspace-panel__head">
+        <h2>{{ labels.recent_activity }}</h2>
+      </div>
+      <div class="workspace-list">
+        {% for chat in dashboard.recent_chats %}
+          <article class="workspace-list__item">
+            <strong>{{ chat.message }}</strong>
+            <p>{{ chat.response[:110] }}{% if chat.response|length > 110 %}...{% endif %}</p>
+          </article>
+        {% else %}
+          <p class="empty-state">No chat activity yet.</p>
+        {% endfor %}
+      </div>
+    </article>
+
+    <article class="workspace-panel">
+      <div class="workspace-panel__head">
+        <h2>Featured resources</h2>
+      </div>
+      <div class="workspace-list">
+        {% for item in dashboard.resources %}
+          <a class="workspace-list__item workspace-list__item--link" href="{{ item.file_url }}" target="_blank" rel="noreferrer">
+            <strong>{{ item.title }}</strong>
+            <p>{{ item.type.replace('_', ' ')|title }}</p>
+          </a>
+        {% else %}
+          <p class="empty-state">No resources yet.</p>
+        {% endfor %}
+      </div>
+    </article>
+  </section>
+</section>

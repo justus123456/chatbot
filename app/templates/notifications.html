@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block body %}
+  <main class="workspace-shell" data-shell>
+    {% include "partials/sidebar.html" %}
+    <section class="workspace-view">
+      <header class="workspace-pagehead">
+        <div>
+          <span class="eyebrow">Stay informed</span>
+          <h1>Notifications</h1>
+          <p>Review reminders, announcements, and personal updates in a tighter workspace layout.</p>
+        </div>
+      </header>
+      <section class="workspace-panel workspace-panel--full">
+        <div id="notifications-list" class="workspace-list" data-notifications-list>
+          {% for item in notifications %}
+            <article class="workspace-list__item">
+              <div class="workspace-list__meta">
+                <strong>{{ item.type|title }}</strong>
+                <span>{{ item.date }}</span>
+              </div>
+              <p>{{ item.message }}</p>
+            </article>
+          {% else %}
+            <p class="empty-state">No notifications available.</p>
+          {% endfor %}
+        </div>
+      </section>
+    </section>
+  </main>
+{% endblock %}

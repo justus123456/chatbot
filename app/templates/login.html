@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block body %}
+  <main class="auth-shell">
+    <section class="auth-card">
+      <div class="auth-copy">
+        <span class="eyebrow">{{ labels.hero_tag }}</span>
+        <h1>
+          {% if auth_mode == 'signup' %}
+            Create your student account
+          {% elif auth_mode == 'login' %}
+            {{ labels.login_title }}
+          {% else %}
+            Reset your password
+          {% endif %}
+        </h1>
+        {% if data_mode == 'supabase' %}
+          <p>Your account is created and authenticated through Supabase. Page access depends on the role stored in your Supabase `public.users` profile.</p>
+        {% elif allow_demo_auth %}
+          <p>Demo mode is enabled. Local test accounts are available only for development and tests.</p>
+        {% else %}
+          <p>Supabase auth is currently unavailable. Add your real `.env` keys and restart the app before creating or logging into accounts.</p>
+        {% endif %}
+      </div>
+      <div class="auth-panels auth-panels--single">
+        <div class="auth-switch">
+          <a class="{% if auth_mode == 'signup' %}active{% endif %}" href="{{ url_for('auth.login_page', lang=language, mode='signup') }}">Sign up</a>
+          <a class="{% if auth_mode == 'login' %}active{% endif %}" href="{{ url_for('auth.login_page', lang=language, mode='login') }}">Login</a>
+        </div>
+
+        {% if auth_mode == 'signup' %}
+          <form class="auth-form auth-form--wide" method="post" action="{{ url_for('auth.signup') }}">
+            <h2>Create account</h2>
+            <label>
+              <span>{{ labels.full_name }}</span>
+              <input type="text" name="name" required>
+            </label>
+            <label>
+              <span>{{ labels.email }}</span>
+              <input type="email" name="email" required>
+            </label>
+            <label>
+              <span>{{ labels.password }}</span>
+              <input type="password" name="password" required>
+            </label>
+            <input type="hidden" name="language" value="{{ language }}">
+            <button class="primary-button" type="submit">Create Account</button>
+            <p class="auth-helper">Already have an account? <a href="{{ url_for('auth.login_page', lang=language, mode='login') }}">Login here</a>.</p>
+          </form>
+        {% elif auth_mode == 'login' %}
+          <form class="auth-form auth-form--wide" method="post" action="{{ url_for('auth.login') }}">
+            <h2>Sign in</h2>
+            <input type="hidden" name="language" value="{{ language }}">
+            <label>
+              <span>{{ labels.email }}</span>
+              <input type="email" name="email" required>
+            </label>
+            <label>
+              <span>{{ labels.password }}</span>
+              <input type="password" name="password" required>
+            </label>
+            <button class="primary-button" type="submit">Login</button>
+            <p class="auth-helper">Forgot your password? <a href="{{ url_for('auth.login_page', lang=language, mode='forgot') }}">Reset it here</a>.</p>
+            <p class="auth-helper">Need an account first? <a href="{{ url_for('auth.login_page', lang=language, mode='signup') }}">Create one</a>.</p>
+          </form>
+        {% else %}
+          <form class="auth-form auth-form--wide" method="post" action="{{ url_for('auth.forgot_password') }}">
+            <h2>Forgot password</h2>
+            <label>
+              <span>{{ labels.email }}</span>
+              <input type="email" name="email" required>
+            </label>
+            <input type="hidden" name="language" value="{{ language }}">
+            <button class="primary-button" type="submit">Send Reset Link</button>
+            <p class="auth-helper">Remembered it? <a href="{{ url_for('auth.login_page', lang=language, mode='login') }}">Back to login</a>.</p>
+          </form>
+        {% endif %}
+      </div>
+      <div class="language-pill">
+        <a class="{% if language == 'en' %}active{% endif %}" href="{{ url_for('auth.login_page', lang='en', mode=auth_mode) }}">English</a>
+        <a class="{% if language == 'pidgin' %}active{% endif %}" href="{{ url_for('auth.login_page', lang='pidgin', mode=auth_mode) }}">Pidgin</a>
+      </div>
+    </section>
+  </main>
+{% endblock %}

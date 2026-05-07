@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% block body %}
+  <main class="workspace-shell" data-shell>
+    {% include "partials/sidebar.html" %}
+    <section class="workspace-view">
+      <header class="workspace-pagehead">
+        <div>
+          <span class="eyebrow">Profile setup</span>
+          <h1>Settings</h1>
+          <p>Student details entered here shape notifications, calendar events, and future recommendations so each department gets the right information.</p>
+        </div>
+        <div class="workspace-pagehead__actions">
+          <span class="status-pill">
+            {% if profile_complete %}
+              Profile ready
+            {% else %}
+              Setup needed
+            {% endif %}
+          </span>
+        </div>
+      </header>
+
+      <section class="workspace-panels">
+        <section class="workspace-panel workspace-panel--wide">
+          <div class="workspace-panel__head">
+            <div>
+              <span class="workspace-panel__eyebrow">Student profile</span>
+              <h2>Targeted access details</h2>
+            </div>
+          </div>
+          {% if profile_error %}
+            <p class="empty-state">{{ profile_error }}</p>
+          {% endif %}
+          <form class="settings-form" method="post">
+            <label>
+              <span>Full name</span>
+              <input name="name" type="text" value="{{ user.name or '' }}" required>
+            </label>
+            <label>
+              <span>Phone number</span>
+              <input name="phone" type="text" value="{{ user.phone or '' }}" placeholder="+234..." required>
+            </label>
+            <label>
+              <span>Department</span>
+              <input name="department" type="text" value="{{ user.department or '' }}" placeholder="Computer Science" required>
+            </label>
+            <label>
+              <span>Faculty</span>
+              <input name="faculty" type="text" value="{{ user.faculty or '' }}" placeholder="Natural and Applied Sciences">
+            </label>
+            <label>
+              <span>Level</span>
+              <input name="level" type="text" value="{{ user.level or '' }}" placeholder="100, 200, 300..." required>
+            </label>
+            <label>
+              <span>Student number</span>
+              <input name="student_number" type="text" value="{{ user.student_number or '' }}" placeholder="VUG/...">
+            </label>
+            <label>
+              <span>Preferred language</span>
+              <select name="preferred_language">
+                <option value="en" {% if language == "en" %}selected{% endif %}>English</option>
+                <option value="pidgin" {% if language == "pidgin" %}selected{% endif %}>Pidgin</option>
+              </select>
+            </label>
+            <div class="settings-form__actions">
+              <button class="primary-button" type="submit">Save Profile</button>
+              {% if profile_complete %}
+                <a class="ghost-button ghost-button--compact" href="{{ url_for('web.dashboard') }}">Back to Dashboard</a>
+              {% endif %}
+            </div>
+          </form>
+        </section>
+
+        <section class="workspace-panel">
+          <div class="workspace-panel__head">
+            <h2>Why this matters</h2>
+          </div>
+          <div class="workspace-list">
+            <article class="workspace-list__item">
+              <strong>Department targeting</strong>
+              <p>Law students should not receive Medicine notices, and level-specific updates should stay relevant.</p>
+            </article>
+            <article class="workspace-list__item">
+              <strong>Calendar filtering</strong>
+              <p>Registration dates, briefings, and exams can later be shown per department and level.</p>
+            </article>
+            <article class="workspace-list__item">
+              <strong>Personalization layer</strong>
+              <p>This profile becomes the base for recommendations, smart reminders, and goal tracking.</p>
+            </article>
+          </div>
+        </section>
+      </section>
+    </section>
+  </main>
+{% endblock %}

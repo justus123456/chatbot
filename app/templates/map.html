@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block body %}
+  <main class="workspace-shell" data-shell>
+    {% include "partials/sidebar.html" %}
+    <section class="workspace-view">
+      <header class="workspace-pagehead">
+        <div>
+          <span class="eyebrow">Navigation help</span>
+          <h1>Campus Map</h1>
+          <p>A simple digital office guide so students can quickly identify the major offices they may need for support, payment, and clearance.</p>
+        </div>
+      </header>
+
+      <section class="campus-map-grid">
+        <article class="campus-map-card campus-map-card--wide">
+          <span class="workspace-metric-card__label">Office layout</span>
+          <h2>Main service blocks</h2>
+          <div class="campus-map-layout">
+            <div class="campus-map-layout__item">Main Gate</div>
+            <div class="campus-map-layout__item">Registry</div>
+            <div class="campus-map-layout__item">Bursary</div>
+            <div class="campus-map-layout__item">Student Affairs</div>
+            <div class="campus-map-layout__item">ICT Help Desk</div>
+            <div class="campus-map-layout__item">Hostel Office</div>
+            <div class="campus-map-layout__item">Exams &amp; Records</div>
+            <div class="campus-map-layout__item">Admin Block</div>
+          </div>
+        </article>
+
+        <article class="campus-map-card">
+          <span class="workspace-metric-card__label">Fast routes</span>
+          <h2>Popular student stops</h2>
+          <div class="workspace-list">
+            <article class="workspace-list__item">
+              <strong>Course registration</strong>
+              <p>Registry, Exams &amp; Records, then ICT Help Desk if the portal has issues.</p>
+            </article>
+            <article class="workspace-list__item">
+              <strong>School fees</strong>
+              <p>Bursary first for payment guidance and receipt confirmation.</p>
+            </article>
+            <article class="workspace-list__item">
+              <strong>Hostel booking</strong>
+              <p>Hostel Office for room guidance, then Student Affairs for follow-up issues.</p>
+            </article>
+          </div>
+        </article>
+
+        <article class="campus-map-card">
+          <span class="workspace-metric-card__label">Clearance help</span>
+          <h2>Office checklist</h2>
+          <div class="workspace-list">
+            <article class="workspace-list__item">
+              <strong>1. Bursary</strong>
+              <p>Verify fees and balances.</p>
+            </article>
+            <article class="workspace-list__item">
+              <strong>2. Registry</strong>
+              <p>Confirm registration and records.</p>
+            </article>
+            <article class="workspace-list__item">
+              <strong>3. Student Affairs</strong>
+              <p>Resolve student-service requirements.</p>
+            </article>
+          </div>
+        </article>
+      </section>
+    </section>
+  </main>
+{% endblock %}

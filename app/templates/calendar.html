@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block body %}
+  <main class="workspace-shell" data-shell>
+    {% include "partials/sidebar.html" %}
+    <section class="workspace-view">
+      <header class="workspace-pagehead">
+        <div>
+          <span class="eyebrow">School schedule</span>
+          <h1>Calendar</h1>
+          <p>The full academic calendar lives here, with a month view for quick scanning and an event list for registration, exams, deadlines, and school activities.</p>
+        </div>
+        <div class="workspace-pagehead__actions">
+          <span class="status-pill">{{ calendar_view.label }}</span>
+        </div>
+      </header>
+
+      <section class="workspace-panels workspace-panels--calendar">
+        <section class="workspace-panel workspace-panel--wide">
+          <div class="workspace-panel__head">
+            <div>
+              <span class="workspace-panel__eyebrow">Month view</span>
+              <h2>{{ calendar_view.label }}</h2>
+            </div>
+          </div>
+          <div class="calendar-board">
+            <div class="calendar-board__weekdays">
+              <span>Mon</span>
+              <span>Tue</span>
+              <span>Wed</span>
+              <span>Thu</span>
+              <span>Fri</span>
+              <span>Sat</span>
+              <span>Sun</span>
+            </div>
+            <div class="calendar-board__grid">
+              {% for week in calendar_view.weeks %}
+                {% for day in week %}
+                  {% set iso_day = day.isoformat() %}
+                  {% set day_events = calendar_view.events_by_day.get(iso_day, []) %}
+                  <article class="calendar-day {% if day.month != calendar_view.month_number %}calendar-day--muted{% endif %} {% if iso_day == calendar_view.today %}calendar-day--today{% endif %}">
+                    <div class="calendar-day__head">
+                      <strong>{{ day.day }}</strong>
+                      {% if day_events %}
+                        <span>{{ day_events|length }}</span>
+                      {% endif %}
+                    </div>
+                    <div class="calendar-day__events">
+                      {% for event in day_events[:2] %}
+                        <span class="calendar-chip">{{ event.title }}</span>
+                      {% endfor %}
+                    </div>
+                  </article>
+                {% endfor %}
+              {% endfor %}
+            </div>
+          </div>
+        </section>
+
+        <section class="workspace-panel">
+          <div class="workspace-panel__head">
+            <h2>Whole school calendar</h2>
+          </div>
+          <div class="workspace-list">
+            {% for event in calendar_events %}
+              <article class="workspace-list__item">
+                <div class="workspace-list__meta">
+                  <strong>{{ event.event_type|title }}</strong>
+                  <span>{{ event.start_date }}{% if event.end_date and event.end_date != event.start_date %} to {{ event.end_date }}{% endif %}</span>
+                </div>
+                <strong>{{ event.title }}</strong>
+                <p>{{ event.description }}</p>
+              </article>
+            {% else %}
+              <p class="empty-state">No calendar events available yet.</p>
+            {% endfor %}
+          </div>
+        </section>
+      </section>
+    </section>
+  </main>
+{% endblock %}

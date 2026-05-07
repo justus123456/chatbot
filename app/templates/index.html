@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block body %}
+  <main class="landing-shell">
+    <section class="hero-split">
+      <div class="hero-visual">
+        <div class="hero-visual__glow"></div>
+        <div class="hero-visual__panel">
+          <span class="eyebrow">{{ labels.hero_tag }}</span>
+          <h1>Veritas University</h1>
+          <p>Smart campus support for registration, clearance, hostel booking, fees, and official updates.</p>
+          <div class="hero-stats">
+            <article>
+              <strong>24/7</strong>
+              <span>Student support access</span>
+            </article>
+            <article>
+              <strong>2</strong>
+              <span>Languages in v1</span>
+            </article>
+            <article>
+              <strong>1</strong>
+              <span>Unified campus assistant</span>
+            </article>
+          </div>
+        </div>
+      </div>
+      <div class="hero-copy">
+        <div class="brand-lockup">
+          <div class="brand-mark"></div>
+          <div>
+            <strong>{{ app_name }}</strong>
+            <p>Designed for Veritas students</p>
+          </div>
+        </div>
+        <h2>{{ labels.hero_title }}</h2>
+        <p>{{ labels.hero_copy }}</p>
+        <div class="hero-actions">
+          <a class="primary-button" href="{{ url_for('auth.login_page', lang=language) }}">{{ labels.get_started }}</a>
+          <a class="secondary-button" href="#feature-grid">{{ labels.learn_more }}</a>
+        </div>
+        <div class="language-pill">
+          <a class="{% if language == 'en' %}active{% endif %}" href="{{ url_for('web.index', lang='en') }}">English</a>
+          <a class="{% if language == 'pidgin' %}active{% endif %}" href="{{ url_for('web.index', lang='pidgin') }}">Pidgin</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="feature-grid" class="feature-grid">
+      <article class="feature-card">
+        <h3>Smart Chat Flow</h3>
+        <p>Answers come from FAQs, contacts, rules, and announcements first before AI fallback is used.</p>
+      </article>
+      <article class="feature-card">
+        <h3>Live Student Updates</h3>
+        <p>Announcements and reminders surface on the dashboard and notifications page in one place.</p>
+      </article>
+      <article class="feature-card">
+        <h3>Admin Control</h3>
+        <p>Staff can manage FAQs, resources, contacts, reminders, and announcements without touching code.</p>
+      </article>
+    </section>
+  </main>
+{% endblock %}

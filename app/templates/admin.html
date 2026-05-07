@@ -1,0 +1,212 @@
+{% extends "base.html" %}
+{% block body %}
+  <main class="workspace-shell" data-shell>
+    {% include "partials/sidebar.html" %}
+    <section class="workspace-view">
+      <header class="workspace-pagehead">
+        <div>
+          <span class="eyebrow">Content management</span>
+          <h1>Admin Panel</h1>
+          <p>Manage FAQs, announcements, contacts, calendar events, notifications, and reminders from the same shared product shell.</p>
+        </div>
+      </header>
+
+      <section class="admin-grid">
+        <article class="panel">
+          <h2>Add FAQ</h2>
+          <form class="admin-form" data-admin-form="/api/admin/faqs" data-target="#admin-faq-list">
+            <input name="question" placeholder="Question" required>
+            <textarea name="answer" placeholder="Answer" required></textarea>
+            <input name="category" placeholder="Category" required>
+            <select name="language">
+              <option value="en">English</option>
+              <option value="pidgin">Pidgin</option>
+            </select>
+            <button class="primary-button" type="submit">Save FAQ</button>
+          </form>
+        </article>
+
+        <article class="panel">
+          <h2>Add announcement</h2>
+          <form class="admin-form" data-admin-form="/api/admin/announcements" data-target="#admin-announcement-list">
+            <input name="title" placeholder="Title" required>
+            <textarea name="content" placeholder="Announcement content" required></textarea>
+            <input name="expires_at" type="date" required>
+            <button class="primary-button" type="submit">Publish</button>
+          </form>
+        </article>
+
+        <article class="panel">
+          <h2>Add contact</h2>
+          <form class="admin-form" data-admin-form="/api/admin/contacts" data-target="#admin-contact-list">
+            <input name="name" placeholder="Name" required>
+            <input name="role" placeholder="Role" required>
+            <input name="email" type="email" placeholder="Email" required>
+            <input name="phone" placeholder="Phone" required>
+            <input name="office_location" placeholder="Office location" required>
+            <button class="primary-button" type="submit">Save Contact</button>
+          </form>
+        </article>
+
+        <article class="panel">
+          <h2>Add calendar event</h2>
+          <form class="admin-form" data-admin-form="/api/admin/calendar" data-target="#admin-calendar-list">
+            <input name="title" placeholder="Event title" required>
+            <textarea name="description" placeholder="Description"></textarea>
+            <select name="event_type">
+              <option value="registration">Registration</option>
+              <option value="exam">Exam</option>
+              <option value="deadline">Deadline</option>
+              <option value="holiday">Holiday</option>
+              <option value="fee">Fee</option>
+              <option value="event">Event</option>
+            </select>
+            <input name="start_date" type="date" required>
+            <input name="end_date" type="date">
+            <input name="target_department" placeholder="Target department (optional)">
+            <input name="target_level" placeholder="Target level (optional)">
+            <button class="primary-button" type="submit">Save Event</button>
+          </form>
+        </article>
+
+        <article class="panel">
+          <h2>Add resource</h2>
+          <form class="admin-form" data-admin-form="/api/admin/resources" data-target="#admin-resource-list">
+            <input name="title" placeholder="Title" required>
+            <input name="file_url" placeholder="Supabase public file URL" required>
+            <input name="type" placeholder="past_question or material" required>
+            <textarea name="description" placeholder="Description" required></textarea>
+            <button class="primary-button" type="submit">Save Resource</button>
+          </form>
+        </article>
+
+        <article class="panel">
+          <h2>Send notification</h2>
+          <form class="admin-form" data-admin-form="/api/admin/notifications" data-target="#admin-notification-list">
+            <input name="user_id" placeholder="Student user ID" required>
+            <textarea name="message" placeholder="Notification message" required></textarea>
+            <select name="type">
+              <option value="update">Update</option>
+              <option value="announcement">Announcement</option>
+              <option value="reminder">Reminder</option>
+            </select>
+            <input name="date" type="date" required>
+            <button class="primary-button" type="submit">Send Notification</button>
+          </form>
+        </article>
+
+        <article class="panel">
+          <h2>Add rule</h2>
+          <form class="admin-form" data-admin-form="/api/admin/rules" data-target="#admin-rule-list">
+            <input name="title" placeholder="Rule title" required>
+            <textarea name="content" placeholder="Rule content" required></textarea>
+            <input name="category" placeholder="Category" required>
+            <button class="primary-button" type="submit">Save Rule</button>
+          </form>
+        </article>
+
+        <article class="panel">
+          <h2>Add reminder</h2>
+          <form class="admin-form" data-admin-form="/api/admin/reminders" data-target="#admin-reminder-list">
+            <input name="title" placeholder="Title" required>
+            <textarea name="message" placeholder="Reminder message" required></textarea>
+            <select name="target_role">
+              <option value="student">Students</option>
+              <option value="admin">Admins</option>
+              <option value="all">All users</option>
+            </select>
+            <input name="due_date" type="date" required>
+            <button class="primary-button" type="submit">Create Reminder</button>
+          </form>
+        </article>
+
+        <article class="panel panel--span">
+          <h2>Current content</h2>
+          <div class="admin-lists">
+            <div>
+              <h3>FAQs</h3>
+              <div id="admin-faq-list" class="stack-list">
+                {% for item in admin_data.faqs %}
+                  <article class="stack-item">
+                    <strong>{{ item.question }}</strong>
+                    <p>{{ item.answer }}</p>
+                  </article>
+                {% endfor %}
+              </div>
+            </div>
+            <div>
+              <h3>Announcements</h3>
+              <div id="admin-announcement-list" class="stack-list">
+                {% for item in admin_data.announcements %}
+                  <article class="stack-item">
+                    <strong>{{ item.title }}</strong>
+                    <p>{{ item.content }}</p>
+                  </article>
+                {% endfor %}
+              </div>
+            </div>
+            <div>
+              <h3>Contacts</h3>
+              <div id="admin-contact-list" class="stack-list">
+                {% for item in admin_data.contacts %}
+                  <article class="stack-item">
+                    <strong>{{ item.name }}</strong>
+                    <p>{{ item.role }} - {{ item.email }}</p>
+                  </article>
+                {% endfor %}
+              </div>
+            </div>
+            <div>
+              <h3>Calendar</h3>
+              <div id="admin-calendar-list" class="stack-list">
+                {% for item in admin_data.school_calendar %}
+                  <article class="stack-item">
+                    <strong>{{ item.title }}</strong>
+                    <p>{{ item.event_type }} - {{ item.start_date }}</p>
+                  </article>
+                {% endfor %}
+              </div>
+            </div>
+            <div>
+              <h3>Notifications</h3>
+              <div id="admin-notification-list" class="stack-list"></div>
+            </div>
+            <div>
+              <h3>Rules</h3>
+              <div id="admin-rule-list" class="stack-list">
+                {% for item in admin_data.rules %}
+                  <article class="stack-item">
+                    <strong>{{ item.title }}</strong>
+                    <p>{{ item.content }}</p>
+                  </article>
+                {% endfor %}
+              </div>
+            </div>
+            <div>
+              <h3>Resources</h3>
+              <div id="admin-resource-list" class="stack-list">
+                {% for item in admin_data.resources %}
+                  <article class="stack-item">
+                    <strong>{{ item.title }}</strong>
+                    <p>{{ item.type }} - {{ item.file_url }}</p>
+                  </article>
+                {% endfor %}
+              </div>
+            </div>
+            <div>
+              <h3>Reminders</h3>
+              <div id="admin-reminder-list" class="stack-list">
+                {% for item in admin_data.reminders %}
+                  <article class="stack-item">
+                    <strong>{{ item.title }}</strong>
+                    <p>{{ item.message }}</p>
+                  </article>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </article>
+      </section>
+    </section>
+  </main>
+{% endblock %}

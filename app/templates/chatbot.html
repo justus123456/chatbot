@@ -1,0 +1,185 @@
+{% extends "base.html" %}
+{% block body %}
+  <main class="workspace-shell workspace-shell--chat" data-shell>
+    {% include "partials/sidebar.html" %}
+    <section class="workspace-view workspace-view--chat">
+      <aside class="chat-library">
+      <div class="chat-library__top">
+        <div class="chat-library__brand">
+          <strong>VeritasGPT</strong>
+          <span>student assistant</span>
+        </div>
+        <button class="chat-library__new" type="button">+</button>
+      </div>
+
+      <label class="chat-library__search">
+        <input type="text" value="" placeholder="Search chats..." readonly>
+      </label>
+
+      <div class="chat-library__section">
+        <div class="chat-library__section-head">
+          <strong>Today</strong>
+          <span>{{ chats|length }} total</span>
+        </div>
+        <div class="chat-library__list">
+          {% for chat in chats|reverse %}
+            <article class="chat-library__item {% if loop.first %}active{% endif %}">
+              <strong>{{ chat.message[:34] }}{% if chat.message|length > 34 %}...{% endif %}</strong>
+              <span>{{ chat.created_at }}</span>
+            </article>
+          {% else %}
+            <p class="empty-state">Your chat history will appear here.</p>
+          {% endfor %}
+        </div>
+      </div>
+      </aside>
+
+      <section class="chat-stage">
+        <header class="chat-stage__header">
+          <div>
+            <span class="eyebrow">Veritas GPT 1.0</span>
+            <h1>Student Assistant</h1>
+          </div>
+          <div class="chat-stage__actions">
+            <button class="chip chip--tight" type="button" data-prompt="Exam timetable">Exam timetable</button>
+            <button class="chip chip--tight" type="button" data-prompt="School fees">School fees</button>
+            <button class="chip chip--tight" type="button" data-prompt="Clearance">Clearance</button>
+            <button class="chip chip--tight" type="button" data-prompt="Weekly campus updates">Weekly updates</button>
+            <button class="chip chip--tight" type="button" data-prompt="School rules handbook">School rules</button>
+            <button class="chip chip--tight" type="button" data-prompt="Major school contacts">Contacts</button>
+            <div class="language-pill language-pill--small">
+              <button class="lang-switch {% if language == 'en' %}active{% endif %}" data-language-switch="en" type="button">EN</button>
+              <button class="lang-switch {% if language == 'pidgin' %}active{% endif %}" data-language-switch="pidgin" type="button">PG</button>
+            </div>
+          </div>
+        </header>
+
+        <div id="chat-feed" class="chat-stage__feed">
+          {% for chat in chats %}
+            <article class="message message--user">
+              <div class="message__avatar message__avatar--user">{{ user.name[:1] }}</div>
+              <div class="message__body">
+                <div class="message__bubble">{{ chat.message }}</div>
+              </div>
+            </article>
+            <article class="message message--assistant">
+              <div class="message__avatar">AI</div>
+              <div class="message__body">
+                <div class="message__meta">
+                  <span>{{ labels.knowledge_label if chat.source == 'knowledge_base' else labels.ai_label }}</span>
+                </div>
+                <div class="message__bubble">{{ chat.response|replace('\n', '<br>')|safe }}</div>
+              </div>
+            </article>
+          {% else %}
+            <article class="message message--assistant">
+              <div class="message__avatar">AI</div>
+              <div class="message__body">
+                <div class="message__meta">
+                  <span>{{ labels.knowledge_label }}</span>
+                </div>
+                <div class="message__bubble">Hello {{ user.name }}. Ask me about registration, fees, hostel booking, clearance, contacts, or campus updates.</div>
+              </div>
+            </article>
+          {% endfor %}
+        </div>
+
+        <div class="chat-stage__footer">
+          <form id="chat-form" class="chat-composer chat-composer--compact" data-chat-form>
+            <input id="language-input" type="hidden" name="language" value="{{ language }}">
+            <textarea id="message-input" name="message" rows="1" placeholder="{{ labels.message_placeholder }}"></textarea>
+            <div class="chat-composer__tools">
+              <button class="chat-tool" type="button" aria-label="Emoji">:)</button>
+              <button class="chat-tool" type="button" aria-label="Voice">Mic</button>
+              <button class="primary-button primary-button--icon" type="submit">Send</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <aside class="chat-inspector">
+        <div class="chat-inspector__profile">
+          <div class="chat-inspector__avatar">{{ user.name[:2] }}</div>
+          <div>
+            <strong>{{ user.name }}</strong>
+            <span>{{ user.role|title }}</span>
+          </div>
+        </div>
+
+        <section class="chat-inspector__card">
+          <div class="chat-inspector__heading">
+            <h3>Student profile</h3>
+            <span>{{ user.department or 'Set up' }}</span>
+          </div>
+          <div class="chat-settings">
+            <div class="chat-settings__status">
+              <strong>{{ user.level or 'Level needed' }}</strong>
+              <span>{{ user.student_number or 'Student ID not added yet' }}</span>
+            </div>
+            <a class="ghost-button ghost-button--compact" href="{{ url_for('web.settings') }}">Open Settings</a>
+          </div>
+        </section>
+
+        <section class="chat-inspector__card">
+          <h2>Assistant modules</h2>
+          <div class="chat-inspector__menu">
+            <article class="chat-inspector__menu-item">
+              <strong>Student Support</strong>
+              <span>Fees, hostel, clearance</span>
+            </article>
+            <article class="chat-inspector__menu-item active">
+              <strong>Course Guide</strong>
+              <span>Registration and deadlines</span>
+            </article>
+            <article class="chat-inspector__menu-item">
+              <strong>Campus Updates</strong>
+              <span>Announcements, reminders, calendar events</span>
+            </article>
+            <article class="chat-inspector__menu-item">
+              <strong>Escalation Flow</strong>
+              <span>Supervisor response when the assistant cannot help</span>
+            </article>
+          </div>
+        </section>
+
+        <section class="chat-inspector__card">
+          <div class="chat-inspector__heading">
+            <h3>Workspace links</h3>
+            <span>Next steps</span>
+          </div>
+          <div class="chat-inspector__menu">
+            <a class="chat-inspector__menu-item" href="{{ url_for('web.calendar') }}">
+              <strong>School Calendar</strong>
+              <span>View session dates and upcoming deadlines</span>
+            </a>
+            <a class="chat-inspector__menu-item" href="{{ url_for('web.notes') }}">
+              <strong>Study Notes</strong>
+              <span>Keep private notes and future document work</span>
+            </a>
+            <a class="chat-inspector__menu-item" href="{{ url_for('web.tools') }}">
+              <strong>Learning Assistant</strong>
+              <span>Summaries, flashcards, Q&amp;A, and past questions</span>
+            </a>
+          </div>
+        </section>
+
+        <section class="chat-inspector__card">
+          <div class="chat-inspector__heading">
+            <h3>Recent Chats</h3>
+            <span>{{ chats|length }}</span>
+          </div>
+          <div class="chat-inspector__recent">
+            {% for chat in chats|reverse %}
+              <article class="chat-inspector__recent-item {% if loop.first %}active{% endif %}">
+                <strong>{{ chat.message[:26] }}{% if chat.message|length > 26 %}...{% endif %}</strong>
+                <span>{{ chat.created_at }}</span>
+              </article>
+            {% else %}
+              <p class="empty-state">No recent chats yet.</p>
+            {% endfor %}
+          </div>
+        </section>
+      </aside>
+    </section>
+  </main>
+{% endblock %}
