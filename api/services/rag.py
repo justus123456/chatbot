@@ -15,16 +15,29 @@ class RAGService:
         self.llm = GroqLLM(current_app.config["GROQ_API_KEY"], current_app.config["GROQ_MODEL"])
 
     def retrieve_and_respond(self, query, user):
-        query_embedding = self.embeddings.embed(query)
-        chunks = self.supabase.rpc(
-            "search_chunks",
-            {
-                "query_embedding": query_embedding,
-                "user_department": user.get("department"),
-                "user_level": int(user.get("level") or 0) or None,
-                "match_count": 5,
-            },
-        ).execute().data or []
+        try:
+            query_embedding = self.embeddings.embed(query)
+            chunks = self.supabase.rpc(
+                "search_chunks",
+                {
+                    "query_embedding": query_embedding,
+                    "user_department": user.get("department"),
+                    "user_level": int(user.get("level") or 0) or None,
+                    "match_count": 5,
+                },
+            ).execute().data or []
+        except Exception as exc:
+            return {
+                "response": (
+                    "I cannot search the school knowledge base right now because the embedding service is unavailable. "
+                    "Start Ollama on this computer, or change EMBEDDING_PROVIDER to fake for local testing."
+                ),
+                "confidence": 0.0,
+                "source": "embedding_unavailable",
+                "chunks": [],
+                "should_escalate": False,
+                "error": str(exc),
+            }
 
         if not chunks:
             return {"response": None, "confidence": 0.0, "source": "escalated", "chunks": [], "should_escalate": True}

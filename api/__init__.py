@@ -22,7 +22,14 @@ def create_app(test_config=None):
     if test_config:
         app.config.update(test_config)
 
-    CORS(app, origins=[app.config["FRONTEND_URL"]], supports_credentials=True)
+    frontend_origins = {
+        app.config["FRONTEND_URL"],
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "http://localhost:3001",
+        "http://127.0.0.1:3001",
+    }
+    CORS(app, origins=list(frontend_origins), supports_credentials=True)
     Limiter(
         key_func=lambda: getattr(request, "current_user", {}).get("id") if hasattr(request, "current_user") else get_remote_address(),
         app=app,

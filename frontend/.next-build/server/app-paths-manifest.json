@@ -1,6 +1,7 @@
 {
-  "/signup/page": "app/signup/page.js",
+  "/icon.svg/route": "app/icon.svg/route.js",
   "/dashboard/page": "app/dashboard/page.js",
+  "/signup/page": "app/signup/page.js",
   "/calendar/page": "app/calendar/page.js",
   "/chat/page": "app/chat/page.js",
   "/admin/page": "app/admin/page.js"
