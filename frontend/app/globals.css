@@ -58,6 +58,119 @@ body {
   transition: background-color 220ms ease, color 220ms ease;
 }
 
+.material-symbols-outlined {
+  display: inline-block;
+  vertical-align: middle;
+  font-family: "Material Symbols Outlined";
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+  line-height: 1;
+}
+
+.gov-dashboard {
+  --gov-primary: #002045;
+  --gov-primary-soft: #d6e3ff;
+  --gov-secondary: #545f72;
+  --gov-surface: #faf9fd;
+  --gov-panel: #ffffff;
+  --gov-container: #efedf1;
+  --gov-container-low: #f4f3f7;
+  --gov-container-high: #e9e7eb;
+  --gov-outline: #c4c6cf;
+  --gov-text: #1a1c1e;
+  --gov-muted: #43474e;
+  min-height: 100vh;
+  background: var(--gov-surface);
+  color: var(--gov-text);
+  font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: 0;
+}
+
+.gov-card {
+  border: 1px solid var(--gov-outline);
+  background: var(--gov-panel);
+  box-shadow: 0 1px 2px rgba(0, 32, 69, 0.06);
+}
+
+.gov-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.gov-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.gov-scrollbar::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+
+.governance-embedded {
+  color: var(--gov-text);
+}
+
+.governance-embedded .app-bg {
+  background: transparent;
+}
+
+.governance-embedded .app-surface {
+  background: transparent;
+  color: var(--gov-text);
+}
+
+.governance-embedded .app-panel,
+.governance-embedded .app-panel-strong {
+  background: #ffffff;
+  border-color: var(--gov-outline);
+  color: var(--gov-text);
+  box-shadow: 0 1px 2px rgba(0, 32, 69, 0.06);
+}
+
+.governance-embedded .text-white,
+.governance-embedded .text-white\/80,
+.governance-embedded .text-white\/70,
+.governance-embedded .text-white\/65,
+.governance-embedded .text-white\/60,
+.governance-embedded .text-white\/55,
+.governance-embedded .text-white\/50,
+.governance-embedded .text-white\/45,
+.governance-embedded .text-white\/40 {
+  color: var(--gov-text) !important;
+}
+
+.governance-embedded .bg-white\/5,
+.governance-embedded .bg-white\/\[0\.04\],
+.governance-embedded .bg-white\/\[0\.05\],
+.governance-embedded .bg-white\/\[0\.06\],
+.governance-embedded .bg-white\/\[0\.07\],
+.governance-embedded .bg-white\/\[0\.08\],
+.governance-embedded .bg-white\/10 {
+  background-color: #ffffff !important;
+}
+
+.governance-embedded .border-white\/10,
+.governance-embedded .border-white\/15 {
+  border-color: var(--gov-outline) !important;
+}
+
+.gov-dashboard [class*="bg-[var(--gov-primary)]"],
+.gov-dashboard [class*="bg-[#002045]"],
+.gov-dashboard [class*="bg-[#183a66]"],
+html[data-theme="light"] .gov-dashboard [class*="bg-[var(--gov-primary)]"],
+html[data-theme="light"] .gov-dashboard [class*="bg-[#002045]"],
+html[data-theme="light"] .gov-dashboard [class*="bg-[#183a66]"],
+html[data-theme="light"] .gov-dashboard .text-white {
+  color: #ffffff !important;
+}
+
+.gov-dashboard [class*="bg-[var(--gov-primary)]"] *,
+.gov-dashboard [class*="bg-[#002045]"] *,
+.gov-dashboard [class*="bg-[#183a66]"] *,
+html[data-theme="light"] .gov-dashboard [class*="bg-[var(--gov-primary)]"] *,
+html[data-theme="light"] .gov-dashboard [class*="bg-[#002045]"] *,
+html[data-theme="light"] .gov-dashboard [class*="bg-[#183a66]"] * {
+  color: #ffffff !important;
+}
+
 ::selection {
   background: var(--selection);
 }

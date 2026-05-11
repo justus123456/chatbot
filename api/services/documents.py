@@ -13,7 +13,13 @@ def extract_text(file_storage):
             return "\n".join(page.get_text() for page in document)
     if filename.endswith(".docx"):
         document = DocxDocument(BytesIO(data))
-        return "\n".join(paragraph.text for paragraph in document.paragraphs)
+        parts = [paragraph.text for paragraph in document.paragraphs if paragraph.text.strip()]
+        for table in document.tables:
+            for row in table.rows:
+                cells = [cell.text.strip() for cell in row.cells if cell.text.strip()]
+                if cells:
+                    parts.append(" | ".join(cells))
+        return "\n".join(parts)
     return data.decode("utf-8", errors="ignore")
 
 

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { apiFetch } from "@/lib/api/flask-client";
+import { getRoleHome } from "@/lib/roles";
 import { createClient } from "@/lib/supabase/client";
 
 export function LoginForm() {
@@ -13,6 +14,9 @@ export function LoginForm() {
 
   useEffect(() => {
     router.prefetch("/dashboard");
+    router.prefetch("/admin");
+    router.prefetch("/lecturer");
+    router.prefetch("/dean");
     router.prefetch("/complete-profile");
   }, [router]);
 
@@ -59,11 +63,11 @@ export function LoginForm() {
     const { data } = await supabase.auth.getSession();
 
     try {
-      const result = await apiFetch<{ profile: { is_profile_complete?: boolean } }>("/api/auth/bootstrap-user", data.session?.access_token, {
+      const result = await apiFetch<{ profile: { is_profile_complete?: boolean; role?: string } }>("/api/auth/bootstrap-user", data.session?.access_token, {
         method: "POST",
       });
       setLoading(false);
-      router.push(result.profile?.is_profile_complete ? "/dashboard" : "/complete-profile");
+      router.push(getRoleHome(result.profile?.role, Boolean(result.profile?.is_profile_complete)));
     } catch (caught) {
       setLoading(false);
       setError(caught instanceof Error ? caught.message : "Could not prepare your student profile.");

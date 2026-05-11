@@ -28,4 +28,7 @@ def parse_export(text):
 
 
 def export_to_knowledge_text(messages):
-    return "\n".join(f"{item['sender']}: {item['message']}" for item in messages)
+    return "\n".join(
+        f"[{item['date']} {item['time']}] {item['sender']}: {item['message']}"
+        for item in messages
+    )

@@ -18,11 +18,16 @@ def list_announcements():
         or []
     )
 
-    def visible(item):
-        departments = item.get("target_departments") or "all"
-        levels = item.get("target_levels") or "all"
-        department_ok = departments == "all" or user.get("department") in departments
-        level_ok = levels == "all" or user.get("level") in levels
-        return department_ok and level_ok
+    def matches_target(target, value):
+        if not target or target == "all":
+            return True
+        if isinstance(target, list):
+            normalized = [str(item).lower() for item in target]
+            return "all" in normalized or str(value) in [str(item) for item in target]
+        return str(target).lower() == "all" or str(value) in str(target)
 
-    return jsonify({"data": [item for item in records if visible(item)], "total": len(records), "page": 1, "per_page": 50, "has_more": False})
+    def visible(item):
+        return matches_target(item.get("target_departments"), user.get("department")) and matches_target(item.get("target_levels"), user.get("level"))
+
+    visible_records = [item for item in records if visible(item)]
+    return jsonify({"data": visible_records, "total": len(visible_records), "page": 1, "per_page": 50, "has_more": False})

@@ -1,12 +1,14 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import { ArrowRight, Bell, Calendar, MessageSquare, Sparkles } from "lucide-react";
 import { AppShell } from "@/components/layout/app-shell";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { apiFetch } from "@/lib/api/flask-client";
 import { useCurrentUser } from "@/lib/hooks/use-current-user";
+import { getRoleHome, isStaffRole } from "@/lib/roles";
 import { createClient } from "@/lib/supabase/client";
 import type { Announcement, CalendarEvent, Notification, PaginatedResponse } from "@/lib/types";
 
@@ -23,10 +25,17 @@ const initialState: DashboardState = {
 };
 
 export default function DashboardPage() {
+  const router = useRouter();
   const { user, loading: userLoading } = useCurrentUser();
   const [data, setData] = useState<DashboardState>(initialState);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (!userLoading && isStaffRole(user?.role)) {
+      router.replace(getRoleHome(user?.role, true));
+    }
+  }, [router, user?.role, userLoading]);
 
   useEffect(() => {
     let cancelled = false;

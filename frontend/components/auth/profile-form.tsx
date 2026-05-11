@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { CheckCircle2, ChevronDown, Circle, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { apiFetch } from "@/lib/api/flask-client";
+import { getRoleHome, isStaffRole } from "@/lib/roles";
 import { createClient } from "@/lib/supabase/client";
 
 type SectionId = "academic" | "contact" | "preferences";
@@ -121,9 +122,14 @@ export function ProfileForm() {
     }
 
     try {
-      await apiFetch("/api/auth/bootstrap-user", sessionData.session?.access_token, {
+      const bootstrap = await apiFetch<{ profile: { role?: string } }>("/api/auth/bootstrap-user", sessionData.session?.access_token, {
         method: "POST",
       });
+      if (isStaffRole(bootstrap.profile?.role)) {
+        router.push(getRoleHome(bootstrap.profile?.role, true));
+        router.refresh();
+        return;
+      }
     } catch (caught) {
       setLoading(false);
       setError(caught instanceof Error ? caught.message : "Could not prepare your student profile.");
