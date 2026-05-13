@@ -5,3 +5,7 @@ frontend/node_modules/
 frontend/.env.local
 __pycache__/
 *.pyc
+.next/
+dist/
+build/
+.env
