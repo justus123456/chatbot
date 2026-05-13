@@ -33,6 +33,7 @@ declare global {
             client_id: string;
             scope: string;
             callback: (response: { access_token?: string; error?: string; expires_in?: number }) => void;
+            error_callback?: (error: { type?: string; message?: string }) => void;
           }) => GoogleTokenClient;
         };
       };
@@ -53,6 +54,7 @@ export default function CalendarPage() {
   const [tokenClient, setTokenClient] = useState<GoogleTokenClient | null>(null);
   const [scriptReady, setScriptReady] = useState(false);
   const [silentReconnectTried, setSilentReconnectTried] = useState(false);
+  const [pendingSchoolEvent, setPendingSchoolEvent] = useState<CalendarEvent | null>(null);
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
@@ -69,8 +71,13 @@ export default function CalendarPage() {
   useEffect(() => {
     const existingScript = document.querySelector<HTMLScriptElement>("script[data-google-identity]");
     if (existingScript) {
-      setScriptReady(true);
-      return;
+      if (window.google?.accounts?.oauth2) {
+        setScriptReady(true);
+        return;
+      }
+      const markReady = () => setScriptReady(true);
+      existingScript.addEventListener("load", markReady, { once: true });
+      return () => existingScript.removeEventListener("load", markReady);
     }
 
     const script = document.createElement("script");
@@ -85,27 +92,41 @@ export default function CalendarPage() {
 
   useEffect(() => {
     if (!scriptReady || !googleClientId || !window.google?.accounts?.oauth2) return;
-    setTokenClient(
-      window.google.accounts.oauth2.initTokenClient({
-        client_id: googleClientId,
-        scope: googleScope,
-        callback: (response) => {
-          if (response.error || !response.access_token) {
-            setError("Google Calendar permission was not granted.");
-            return;
-          }
-          setError("");
-          setAccessToken(response.access_token);
-          setCalendarConnected(true);
-          storeGoogleCalendarToken(response.access_token, response.expires_in || 3600);
-        },
-      }),
-    );
+    try {
+      setTokenClient(
+        window.google.accounts.oauth2.initTokenClient({
+          client_id: googleClientId,
+          scope: googleScope,
+          callback: (response) => {
+            if (response.error || !response.access_token) {
+              setError(getGoogleCalendarError(response.error));
+              return;
+            }
+            setError("");
+            setAccessToken(response.access_token);
+            setCalendarConnected(true);
+            storeGoogleCalendarToken(response.access_token, response.expires_in || 3600);
+          },
+          error_callback: (googleError) => {
+            setError(getGoogleCalendarError(googleError.type || googleError.message));
+          },
+        }),
+      );
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : "Could not initialize Google Calendar sign-in.");
+    }
   }, [scriptReady]);
 
   useEffect(() => {
     if (accessToken) loadGoogleEvents(accessToken, visibleMonth);
   }, [accessToken, visibleMonth]);
+
+  useEffect(() => {
+    if (!accessToken || !pendingSchoolEvent) return;
+    const eventToAdd = pendingSchoolEvent;
+    setPendingSchoolEvent(null);
+    addSchoolEventToGoogle(eventToAdd, accessToken);
+  }, [accessToken, pendingSchoolEvent]);
 
   useEffect(() => {
     if (!tokenClient || !calendarConnected || accessToken || silentReconnectTried) return;
@@ -146,7 +167,24 @@ export default function CalendarPage() {
       setError("Add NEXT_PUBLIC_GOOGLE_CLIENT_ID to frontend/.env.local first.");
       return;
     }
-    tokenClient?.requestAccessToken({ prompt: "consent" });
+    if (!scriptReady) {
+      setError("Google sign-in is still loading. Try again in a moment.");
+      return;
+    }
+    if (!window.google?.accounts?.oauth2) {
+      setError("Google sign-in did not load. Check your internet connection, ad blocker, or browser privacy settings.");
+      return;
+    }
+    if (!tokenClient) {
+      setError("Google Calendar is not ready yet. Restart the frontend after changing NEXT_PUBLIC_GOOGLE_CLIENT_ID, then try again.");
+      return;
+    }
+    setError("");
+    try {
+      tokenClient.requestAccessToken({ prompt: "consent" });
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : "Could not open Google Calendar sign-in.");
+    }
   }
 
   function disconnectCalendar() {
@@ -235,8 +273,10 @@ export default function CalendarPage() {
     }
   }
 
-  async function addSchoolEventToGoogle(event: CalendarEvent) {
-    if (!accessToken) {
+  async function addSchoolEventToGoogle(event: CalendarEvent, tokenOverride?: string) {
+    const googleToken = tokenOverride || accessToken;
+    if (!googleToken) {
+      setPendingSchoolEvent(event);
       connectGoogleCalendar();
       return;
     }
@@ -248,7 +288,7 @@ export default function CalendarPage() {
       const response = await fetch("https://www.googleapis.com/calendar/v3/calendars/primary/events", {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${googleToken}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
@@ -260,7 +300,7 @@ export default function CalendarPage() {
       });
       const payload = await response.json();
       if (!response.ok) throw new Error(payload.error?.message || "Could not add school event to Google Calendar.");
-      await loadGoogleEvents(accessToken, visibleMonth);
+      await loadGoogleEvents(googleToken, visibleMonth);
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Could not add school event to Google Calendar.");
     } finally {
@@ -307,7 +347,7 @@ export default function CalendarPage() {
                   </Button>
                 </>
               ) : (
-                <Button type="button" onClick={connectGoogleCalendar} disabled={!tokenClient && !!googleClientId}>
+                <Button type="button" onClick={connectGoogleCalendar}>
                   {calendarConnected ? "Reconnect Google Calendar" : "Connect Google Calendar"}
                 </Button>
               )}
@@ -656,4 +696,15 @@ function cleanCalendarDescription(description: string) {
 
 function isMeaningfulSchoolEvent(event: CalendarEvent) {
   return Boolean(event.title && !/^\d{4}(\s+(first|second))?$/i.test(event.title.trim()));
+}
+
+function getGoogleCalendarError(error?: string) {
+  const value = (error || "").toLowerCase();
+  if (value.includes("popup_failed_to_open")) return "Google sign-in popup was blocked. Allow popups for this site and try again.";
+  if (value.includes("popup_closed")) return "Google sign-in was closed before permission was granted.";
+  if (value.includes("access_denied")) return "Google Calendar permission was denied.";
+  if (value.includes("origin") || value.includes("redirect") || value.includes("invalid_client")) {
+    return "Google OAuth is not configured for this site. In Google Cloud Console, add http://localhost:3000 to Authorized JavaScript origins for this OAuth client.";
+  }
+  return error ? `Google Calendar connection failed: ${error}` : "Google Calendar permission was not granted.";
 }

@@ -22,6 +22,7 @@ declare global {
             client_id: string;
             scope: string;
             callback: (response: { access_token?: string; error?: string; expires_in?: number }) => void;
+            error_callback?: (error: { type?: string; message?: string }) => void;
           }) => GoogleTokenClient;
         };
       };
@@ -100,23 +101,31 @@ export default function GoalsPage() {
 
   useEffect(() => {
     if (!scriptReady || !googleClientId || !window.google?.accounts?.oauth2) return;
-    setTokenClient(
-      window.google.accounts.oauth2.initTokenClient({
-        client_id: googleClientId,
-        scope: googleScope,
-        callback: (response) => {
-          if (response.access_token) {
-            setError("");
-            setAccessToken(response.access_token);
-            setCalendarConnected(true);
-            storeGoogleCalendarToken(response.access_token, response.expires_in || 3600);
-          } else {
+    try {
+      setTokenClient(
+        window.google.accounts.oauth2.initTokenClient({
+          client_id: googleClientId,
+          scope: googleScope,
+          callback: (response) => {
+            if (response.access_token) {
+              setError("");
+              setAccessToken(response.access_token);
+              setCalendarConnected(true);
+              storeGoogleCalendarToken(response.access_token, response.expires_in || 3600);
+            } else {
+              setPendingReminderGoal(null);
+              setError(getGoogleCalendarError(response.error));
+            }
+          },
+          error_callback: (googleError) => {
             setPendingReminderGoal(null);
-            setError("Google Calendar permission was not granted.");
-          }
-        },
-      }),
-    );
+            setError(getGoogleCalendarError(googleError.type || googleError.message));
+          },
+        }),
+      );
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : "Could not initialize Google Calendar sign-in.");
+    }
   }, [scriptReady]);
 
   useEffect(() => {
@@ -275,6 +284,14 @@ export default function GoalsPage() {
     }
     if (!googleClientId) {
       setError("Add NEXT_PUBLIC_GOOGLE_CLIENT_ID to frontend/.env.local first.");
+      return;
+    }
+    if (!scriptReady) {
+      setError("Google sign-in is still loading. Try Add reminder again in a moment.");
+      return;
+    }
+    if (!window.google?.accounts?.oauth2) {
+      setError("Google sign-in did not load. Check your internet connection, ad blocker, or browser privacy settings.");
       return;
     }
     if (accessToken) {
@@ -616,4 +633,15 @@ function toFriendlyError(caught: unknown) {
     return "Your login session expired. Please log out, log in again, and retry.";
   }
   return message;
+}
+
+function getGoogleCalendarError(error?: string) {
+  const value = (error || "").toLowerCase();
+  if (value.includes("popup_failed_to_open")) return "Google sign-in popup was blocked. Allow popups for this site and try again.";
+  if (value.includes("popup_closed")) return "Google sign-in was closed before permission was granted.";
+  if (value.includes("access_denied")) return "Google Calendar permission was denied.";
+  if (value.includes("origin") || value.includes("redirect") || value.includes("invalid_client")) {
+    return "Google OAuth is not configured for this site. In Google Cloud Console, add http://localhost:3000 to Authorized JavaScript origins for this OAuth client.";
+  }
+  return error ? `Google Calendar connection failed: ${error}` : "Google Calendar permission was not granted.";
 }
